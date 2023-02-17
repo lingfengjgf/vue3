@@ -30,11 +30,15 @@ import { targets as allTargets, fuzzyMatchTarget } from './utils.js'
 import { scanEnums } from './const-enum.js'
 
 const require = createRequire(import.meta.url)
+// 获取参数
 const args = minimist(process.argv.slice(2))
+// 输出目标，打包哪些package
 const targets = args._
+// 输出格式 cjs esm global
 const formats = args.formats || args.f
 const devOnly = args.devOnly || args.d
 const prodOnly = !devOnly && (args.prodOnly || args.p)
+// 是否添加map文件
 const sourceMap = args.sourcemap || args.s
 const isRelease = args.release
 const buildAllMatching = args.all || args.a
