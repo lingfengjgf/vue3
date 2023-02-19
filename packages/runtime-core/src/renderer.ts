@@ -2321,6 +2321,9 @@ function baseCreateRenderer(
         unmount(container._vnode, null, null, true)
       }
     } else {
+      // 这里patch中第一个参数传的是null
+      // 所以首次patch是挂载，不是更新
+      // 此处vnode会被patch转为dom，并追加到container中
       patch(container._vnode || null, vnode, container, null, null, null, isSVG)
     }
     flushPreFlushCbs()

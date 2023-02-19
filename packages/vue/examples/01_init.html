@@ -1,0 +1,22 @@
+<div id="app">
+  <h1>Vue3 init</h1>
+  <comp></comp>
+</div>
+<script src="../dist/vue.global.js"></script>
+
+<script>
+  // 变化1：函数创建实例
+  // vue2: new Vue({});
+  // vue3: createApp({})
+  const app = Vue.createApp({})
+
+  // 变化2：所有方法都变为实例方法
+  // vue2: Vue.component({});
+  app.component('comp',{
+    template:'<div>comp</div>'
+  })
+
+  // 变化3：挂载mount
+  // vue2: new Vue({}).$mount();
+  app.mount('#app');
+</script>

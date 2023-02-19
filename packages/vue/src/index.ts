@@ -32,6 +32,8 @@ function compileToFunction(
     return cached
   }
 
+  // createApp(...).mount('#app')
+  // template就是mount中传入的参数
   if (template[0] === '#') {
     const el = document.querySelector(template)
     if (__DEV__ && !el) {
@@ -57,6 +59,7 @@ function compileToFunction(
     opts.isCustomElement = tag => !!customElements.get(tag)
   }
 
+  // 模板字符串需要编译，最终希望得到一个render
   const { code } = compile(template, opts)
 
   function onError(err: CompilerError, asWarning = false) {
@@ -77,6 +80,7 @@ function compileToFunction(
   // with keys that cannot be mangled, and can be quite heavy size-wise.
   // In the global build we know `Vue` is available globally so we can avoid
   // the wildcard object.
+  // 通过new Functon得到一个工厂函数，执行工厂函数得到真正的render函数
   const render = (
     __GLOBAL__ ? new Function(code)() : new Function('Vue', code)(runtimeDom)
   ) as RenderFunction

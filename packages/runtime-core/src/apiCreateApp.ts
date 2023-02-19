@@ -206,6 +206,7 @@ export function createAppAPI<HostElement>(
 
     let isMounted = false
 
+    // 返回的app实例
     const app: App = (context.app = {
       _uid: uid++,
       _component: rootComponent as ConcreteComponent,
@@ -296,6 +297,7 @@ export function createAppAPI<HostElement>(
         isHydrate?: boolean,
         isSVG?: boolean
       ): any {
+        // 首次执行走if
         if (!isMounted) {
           // #5571
           if (__DEV__ && (rootContainer as any).__vue_app__) {
@@ -305,6 +307,7 @@ export function createAppAPI<HostElement>(
                 ` you need to unmount the previous app by calling \`app.unmount()\` first.`
             )
           }
+          // 1.创建根组件的vnode
           const vnode = createVNode(
             rootComponent as ConcreteComponent,
             rootProps
@@ -323,6 +326,7 @@ export function createAppAPI<HostElement>(
           if (isHydrate && hydrate) {
             hydrate(vnode as VNode<Node, Element>, rootContainer as any)
           } else {
+            // 通过render，将vnode转换为dom
             render(vnode, rootContainer, isSVG)
           }
           isMounted = true
