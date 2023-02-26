@@ -76,6 +76,7 @@ function findInsertionIndex(id: number) {
   return start
 }
 
+// 将任务放入队列
 export function queueJob(job: SchedulerJob) {
   // the dedupe search uses the startIndex argument of Array.includes()
   // by default the search index includes the current job that is being run
@@ -99,6 +100,7 @@ export function queueJob(job: SchedulerJob) {
   }
 }
 
+// 启动批量更新任务
 function queueFlush() {
   if (!isFlushing && !isFlushPending) {
     isFlushPending = true

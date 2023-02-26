@@ -1298,6 +1298,9 @@ function baseCreateRenderer(
     isSVG,
     optimized
   ) => {
+    // 组件更新函数
+    // 调用patch，在调用之前会获取渲染函数的结果，也就是当前组件的vnode
+    // 在首次执行渲染函数时，已经建立了依赖关系
     const componentUpdateFn = () => {
       if (!instance.isMounted) {
         let vnodeHook: VNodeHook | null | undefined
@@ -1479,16 +1482,19 @@ function baseCreateRenderer(
         if (__DEV__) {
           startMeasure(instance, `render`)
         }
+        // 获取最新的vnode
         const nextTree = renderComponentRoot(instance)
         if (__DEV__) {
           endMeasure(instance, `render`)
         }
+        // 获取缓存的oldVnode
         const prevTree = instance.subTree
         instance.subTree = nextTree
 
         if (__DEV__) {
           startMeasure(instance, `patch`)
         }
+        // 执行diff
         patch(
           prevTree,
           nextTree,
@@ -1542,12 +1548,14 @@ function baseCreateRenderer(
     }
 
     // create reactive effect for rendering
+    // 为组件渲染创建响应式效果
     const effect = (instance.effect = new ReactiveEffect(
-      componentUpdateFn,
-      () => queueJob(update),
+      componentUpdateFn, // 执行函数
+      () => queueJob(update), // scheduler
       instance.scope // track it in component's effect scope
     ))
 
+    // 上面被queueJob的函数实际上是effect.run()
     const update: SchedulerJob = (instance.update = () => effect.run())
     update.id = instance.uid
     // allowRecurse
