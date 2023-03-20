@@ -1,0 +1,27 @@
+<div id="app">
+  <h1>Vue3 Composition API</h1>
+  <div>{{counter}}</div>
+</div>
+<script src="../dist/vue.global.js"></script>
+
+<script>
+  const app = Vue.createApp({
+    // data(){
+    //   return {
+    //     counter:1,
+    //   }
+    // },
+    // mounted(){
+    //   setInterval(() => { this.counter++ }, 1000)
+    // },
+    setup(){
+      const counter = Vue.ref(0);
+      Vue.onMounted(()=>{
+        setInterval(() => { counter.value++ }, 1000)
+      })
+      return { counter }
+    }
+  })
+
+  app.mount('#app');
+</script>

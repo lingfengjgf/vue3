@@ -1219,6 +1219,7 @@ function baseCreateRenderer(
       if (__DEV__) {
         startMeasure(instance, `init`)
       }
+      // 组件初始化
       setupComponent(instance)
       if (__DEV__) {
         endMeasure(instance, `init`)

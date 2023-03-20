@@ -602,7 +602,7 @@ export function setupComponent(
   const isStateful = isStatefulComponent(instance)
   initProps(instance, props, isStateful, isSSR)
   initSlots(instance, children)
-
+// 如果当前组件是有状态的，则执行状态初始化过程，并返回setup的返回值
   const setupResult = isStateful
     ? setupStatefulComponent(instance, isSSR)
     : undefined
