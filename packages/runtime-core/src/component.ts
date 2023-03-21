@@ -651,11 +651,14 @@ function setupStatefulComponent(
   // 2. call setup()
   const { setup } = Component
   if (setup) {
+    // 创建setup上下文对象
     const setupContext = (instance.setupContext =
       setup.length > 1 ? createSetupContext(instance) : null)
 
+    // 设置当前组件的实例，配合getCurrentInstance
     setCurrentInstance(instance)
     pauseTracking()
+    // 执行setup
     const setupResult = callWithErrorHandling(
       setup,
       instance,
@@ -709,6 +712,7 @@ export function handleSetupResult(
   isSSR: boolean
 ) {
   if (isFunction(setupResult)) {
+    // 如果setupResult是函数，则作为render函数处理
     // setup returned an inline render function
     if (__SSR__ && (instance.type as ComponentOptions).__ssrInlineRender) {
       // when the function's name is `ssrRender` (compiled by SFC inline mode),
@@ -729,6 +733,7 @@ export function handleSetupResult(
     if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
       instance.devtoolsRawSetupState = setupResult
     }
+    // 通过代理将setupResult转换为响应式对象
     instance.setupState = proxyRefs(setupResult)
     if (__DEV__) {
       exposeSetupStateOnRenderContext(instance)
@@ -836,11 +841,12 @@ export function finishComponentSetup(
     }
   }
 
+  // 支持vue2
   // support for 2.x options
   if (__FEATURE_OPTIONS_API__ && !(__COMPAT__ && skipOptions)) {
     setCurrentInstance(instance)
     pauseTracking()
-    applyOptions(instance)
+    applyOptions(instance) // 处理options api
     resetTracking()
     unsetCurrentInstance()
   }
@@ -898,6 +904,7 @@ function createAttrsProxy(instance: ComponentInternalInstance): Data {
 export function createSetupContext(
   instance: ComponentInternalInstance
 ): SetupContext {
+  // 对外暴露接口
   const expose: SetupContext['expose'] = exposed => {
     if (__DEV__) {
       if (instance.exposed) {
@@ -922,6 +929,7 @@ export function createSetupContext(
     instance.exposed = exposed || {}
   }
 
+  // 组件的非属性特性
   let attrs: Data
   if (__DEV__) {
     // We use getters in dev in case libs like test-utils overwrite instance
@@ -940,6 +948,7 @@ export function createSetupContext(
     })
   } else {
     return {
+      // 只读的attrs
       get attrs() {
         return attrs || (attrs = createAttrsProxy(instance))
       },

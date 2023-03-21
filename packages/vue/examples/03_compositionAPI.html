@@ -19,7 +19,11 @@
       Vue.onMounted(()=>{
         setInterval(() => { counter.value++ }, 1000)
       })
+      console.log("setup");
       return { counter }
+    },
+    created(){
+      console.log("created");
     }
   })
 
