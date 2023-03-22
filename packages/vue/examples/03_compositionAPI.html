@@ -1,26 +1,30 @@
 <div id="app">
   <h1>Vue3 Composition API</h1>
   <div>{{counter}}</div>
+  <div>{{name}}</div>
+  <div>{{age}}</div>
 </div>
 <script src="../dist/vue.global.js"></script>
 
 <script>
   const app = Vue.createApp({
-    // data(){
-    //   return {
-    //     counter:1,
-    //   }
-    // },
+    data(){
+      return {
+        name:'Lilei',
+        age:20
+      }
+    },
     // mounted(){
     //   setInterval(() => { this.counter++ }, 1000)
     // },
     setup(){
       const counter = Vue.ref(0);
+      const name = Vue.ref('Hmm');
       Vue.onMounted(()=>{
         setInterval(() => { counter.value++ }, 1000)
       })
       console.log("setup");
-      return { counter }
+      return { counter, name }
     },
     created(){
       console.log("created");
