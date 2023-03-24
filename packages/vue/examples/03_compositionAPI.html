@@ -1,6 +1,6 @@
 <div id="app">
   <h1>Vue3 Composition API</h1>
-  <div>{{counter}}</div>
+  <div>{{counter}} - {{counter2}}</div>
   <div>{{name}}</div>
   <div>{{age}}</div>
 </div>
@@ -24,7 +24,16 @@
         setInterval(() => { counter.value++ }, 1000)
       })
       console.log("setup");
-      return { counter, name }
+
+      Vue.onUnmounted(()=>{
+        name.value=""
+      })
+
+      const counter2 = Vue.ref(10);
+      Vue.onMounted(()=>{
+        setInterval(() => { counter2.value++ }, 1000)
+      })
+      return { counter, name, counter2 }
     },
     created(){
       console.log("created");
