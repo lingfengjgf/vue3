@@ -20,6 +20,8 @@ export function provide<T>(key: InjectionKey<T> | string | number, value: T) {
     const parentProvides =
       currentInstance.parent && currentInstance.parent.provides
     if (parentProvides === provides) {
+      // 当前组件不是根组件时相等
+      // 让当前组件的provides继承parentProvides，当子孙组件inject时，通过原型链完成查找
       provides = currentInstance.provides = Object.create(parentProvides)
     }
     // TS doesn't allow symbol as index type

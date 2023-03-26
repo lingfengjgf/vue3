@@ -3,6 +3,8 @@
   <div>{{counter}} - {{counter2}}</div>
   <div>{{name}}</div>
   <div>{{age}}</div>
+
+  <injectcomp></injectcomp>
 </div>
 <script src="../dist/vue.global.js"></script>
 
@@ -33,12 +35,23 @@
       Vue.onMounted(()=>{
         setInterval(() => { counter2.value++ }, 1000)
       })
+
+      const message = Vue.ref('parent message');
+      Vue.provide('message',message);
+      
       return { counter, name, counter2 }
     },
     created(){
       console.log("created");
     }
   })
-
+  
+  app.component('injectcomp', {
+    template:`<div><h1>InjectComponent</h1><div>{{parentMessamge}}</div></div>`,
+    setup(){
+      const parentMessamge = Vue.inject('message');
+      return { parentMessamge }
+    }
+  })
   app.mount('#app');
 </script>
