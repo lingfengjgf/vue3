@@ -1,0 +1,32 @@
+<div id="app">
+  <h1>Vue3 Reactivity API</h1>
+  <div>{{state.counter}} - {{counter2}}</div>
+  <div>{{doubleCounter}}</div>
+</div>
+<script src="../dist/vue.global.js"></script>
+
+<script>
+  const app = Vue.createApp({
+    setup(){
+      const state = Vue.reactive({
+        counter:0
+      });
+      setInterval(() => { state.counter++ }, 1000)
+
+      Vue.watch(()=>state.counter,(val)=>{
+        console.log('watch state.counter:',val);
+      })
+
+      const counter2 = Vue.ref(10);
+      setInterval(() => { counter2.value++ }, 1000)
+      Vue.watch(counter2,(val)=>{
+        console.log('watch counter2:',val);
+      })
+      
+      const doubleCounter = Vue.computed(()=>state.counter * 2);
+
+      return { state, counter2, doubleCounter }
+    },
+  })
+  app.mount('#app');
+</script>
