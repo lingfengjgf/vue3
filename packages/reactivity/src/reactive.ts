@@ -92,6 +92,7 @@ export function reactive(target: object) {
   if (isReadonly(target)) {
     return target
   }
+  // 将普通对象转换为响应式对象
   return createReactiveObject(
     target,
     false,
@@ -209,6 +210,7 @@ function createReactiveObject(
   if (targetType === TargetType.INVALID) {
     return target
   }
+  // 创建代理对象
   const proxy = new Proxy(
     target,
     targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
