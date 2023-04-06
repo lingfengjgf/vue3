@@ -245,7 +245,9 @@ export function trackEffects(
   }
 
   if (shouldTrack) {
+    // 将当前的副作用函数添加到依赖中
     dep.add(activeEffect!)
+    // 在副作用函数中保存依赖
     activeEffect!.deps.push(dep)
     if (__DEV__ && activeEffect!.onTrack) {
       activeEffect!.onTrack(

@@ -47,6 +47,7 @@ export function trackRefValue(ref: RefBase<any>) {
         key: 'value'
       })
     } else {
+      // 依赖收集
       trackEffects(ref.dep || (ref.dep = createDep()))
     }
   }
@@ -64,6 +65,7 @@ export function triggerRefValue(ref: RefBase<any>, newVal?: any) {
         newValue: newVal
       })
     } else {
+      // 触发依赖函数
       triggerEffects(dep)
     }
   }
@@ -115,6 +117,7 @@ class RefImpl<T> {
     this._value = __v_isShallow ? value : toReactive(value)
   }
 
+  // 通过存取器拦截
   get value() {
     trackRefValue(this)
     return this._value
