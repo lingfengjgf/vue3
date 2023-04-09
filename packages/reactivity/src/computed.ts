@@ -41,8 +41,10 @@ export class ComputedRefImpl<T> {
     isReadonly: boolean,
     isSSR: boolean
   ) {
+    // 创建响应式副作用，通过第二个参数去触发getter
     this.effect = new ReactiveEffect(getter, () => {
       if (!this._dirty) {
+        // 触发标识
         this._dirty = true
         triggerRefValue(this)
       }
@@ -55,7 +57,9 @@ export class ComputedRefImpl<T> {
   get value() {
     // the computed ref may get wrapped by other proxies e.g. readonly() #3376
     const self = toRaw(this)
+    // 收集依赖
     trackRefValue(self)
+    // _dirty默认为true，立刻执行一次
     if (self._dirty || !self._cacheable) {
       self._dirty = false
       self._value = self.effect.run()!
@@ -84,8 +88,10 @@ export function computed<T>(
   let getter: ComputedGetter<T>
   let setter: ComputedSetter<T>
 
+  // 如果是函数，则传入的是getter
   const onlyGetter = isFunction(getterOrOptions)
   if (onlyGetter) {
+    // 赋值给getter选项
     getter = getterOrOptions
     setter = __DEV__
       ? () => {
