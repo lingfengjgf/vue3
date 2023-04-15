@@ -41,7 +41,7 @@ export class ComputedRefImpl<T> {
     isReadonly: boolean,
     isSSR: boolean
   ) {
-    // 创建响应式副作用，通过第二个参数去触发getter
+    // 创建响应式副作用，通过第二个参数执行effect，建立响应式数据和计算属性之间的关系
     this.effect = new ReactiveEffect(getter, () => {
       if (!this._dirty) {
         // 触发标识
@@ -57,7 +57,7 @@ export class ComputedRefImpl<T> {
   get value() {
     // the computed ref may get wrapped by other proxies e.g. readonly() #3376
     const self = toRaw(this)
-    // 收集依赖
+    // 收集依赖，建立计算属性和组件更新函数之间的关系
     trackRefValue(self)
     // _dirty默认为true，立刻执行一次
     if (self._dirty || !self._cacheable) {

@@ -271,9 +271,11 @@ function doWatch(
 
   if (cb && deep) {
     const baseGetter = getter
+    // 递归处理
     getter = () => traverse(baseGetter())
   }
 
+  // 清空方法
   let cleanup: () => void
   let onCleanup: OnCleanup = (fn: () => void) => {
     cleanup = effect.onStop = () => {
@@ -313,6 +315,7 @@ function doWatch(
     }
     if (cb) {
       // watch(source, cb)
+      // 获取最新的值
       const newValue = effect.run()
       if (
         deep ||
@@ -330,6 +333,8 @@ function doWatch(
         if (cleanup) {
           cleanup()
         }
+
+        // 调用回调函数cb
         callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
           newValue,
           // pass undefined as the old value when it's changed for the first time
@@ -353,6 +358,7 @@ function doWatch(
   job.allowRecurse = !!cb
 
   let scheduler: EffectScheduler
+  // 根据用户传入的第三个参数options决定如何执行cb
   if (flush === 'sync') {
     scheduler = job as any // the scheduler function gets called directly
   } else if (flush === 'post') {
@@ -364,6 +370,7 @@ function doWatch(
     scheduler = () => queueJob(job)
   }
 
+  // 为getter创建响应式副作用函数
   const effect = new ReactiveEffect(getter, scheduler)
 
   if (__DEV__) {
